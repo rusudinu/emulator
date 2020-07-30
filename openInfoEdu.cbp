@@ -34,10 +34,13 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="include/ButtonBoard.h" />
+		<Unit filename="include/Defines.hpp" />
 		<Unit filename="include/GUIButton.hpp" />
+		<Unit filename="include/Interpreter.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ButtonBoard.cpp" />
 		<Unit filename="src/GUIButton.cpp" />
+		<Unit filename="src/Interpreter.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
