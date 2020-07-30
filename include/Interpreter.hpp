@@ -15,6 +15,7 @@ class Interpreter
 
         sf::RenderTexture renderTexture;
         char * ROM;
+        char * RAM;
 
         char * getRegistry( char index );
 

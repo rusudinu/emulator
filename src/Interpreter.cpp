@@ -10,12 +10,14 @@ Interpreter::Interpreter() {
     renderTexture.create(EMULATOR_WIDTH, EMULATOR_HEIGHT);
     renderTexture.clear();
     // renderTexture.display();
+    RAM = new char[EMULATOR_RAM];
 }
 
 Interpreter::~Interpreter() {
     if (!ROM) {
         delete ROM;
     }
+    delete RAM;
 }
 
 bool Interpreter::loadROMFromFile(std::string path) {
@@ -45,25 +47,39 @@ union Instruction{
     char b[4]; // 4 bytes
 };
 
+enum class REG_TYPE{
+    RA, RB, RC, RD, RE, RF, PC, SP, IN, RET
+};
+
 char * Interpreter::getRegistry(char index) {
     switch(index){
-        case 0:
+        case (char)REG_TYPE::RA:
             return &RA;
-        case 1:
+        case (char)REG_TYPE::RB:
             return &RB;
-        case 2:
+        case (char)REG_TYPE::RC:
             return &RC;
-        case 3:
+        case (char)REG_TYPE::RD:
             return &RD;
-        case 4:
+        case (char)REG_TYPE::RE:
             return &RE;
-        case 5:
+        case (char)REG_TYPE::RF:
             return &RF;
         default:
             std::cout << "[ERR] Attempting to retrieve a registry that doesn't exist! " << (int)index << std::endl;
             break;
     }
 }
+
+enum class INSTRUCTION_TYPE
+{
+    LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT
+};
+
+union LABEL{
+    unsigned short int SHORT;
+    unsigned char BYTE[2];
+};
 
 void Interpreter::interpret(int instructions) {
     Instruction currentINSTR;
@@ -72,14 +88,52 @@ void Interpreter::interpret(int instructions) {
         currentINSTR.int32 = *( (unsigned int * )( ROM + PC*4 ));
         // std::cout << currentINSTR.int32 << std::endl;
 
+        LABEL label;
+
         switch( currentINSTR.b[0] ){
-            case 0: // LBI
+            case (char)INSTRUCTION_TYPE::LBI: // Load Byte Immediate Value
                 std::cout << "LBI " << (int)currentINSTR.b[1] << " " << (int)currentINSTR.b[2] << std::endl;
                 getRegistry(currentINSTR.b[1])[0] = currentINSTR.b[2];
                 PC++;
                 break;
-            case 8:
-                renderTexture.clear(sf::Color::Red);
+            case (char)INSTRUCTION_TYPE::LB: // Load Byte
+                getRegistry(currentINSTR.b[1])[0] = RAM[currentINSTR.b[2]];
+                PC++;
+                break;
+            case (char)INSTRUCTION_TYPE::SB: // Store Byte
+                RAM[getRegistry(currentINSTR.b[1])[0]] = getRegistry(currentINSTR.b[2])[0];
+                PC++;
+                break;
+            case (char)INSTRUCTION_TYPE::CALL: // Call Subroutine
+                RET = PC+1;
+                label.BYTE[0] = currentINSTR.b[2];
+                label.BYTE[1] = currentINSTR.b[3];
+                std::cout << "CALL to instruction " << label.SHORT << std::endl;
+                PC = label.SHORT;
+                break;
+            case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
+                label.BYTE[0] = currentINSTR.b[2];
+                label.BYTE[1] = currentINSTR.b[3];
+                std::cout << "JUMP to instruction " << label.SHORT << std::endl;
+                PC = label.SHORT;
+                break;
+            case (char)INSTRUCTION_TYPE::SYSCALL: // System Call
+
+                break;
+            case (char)INSTRUCTION_TYPE::MOV: // Move byte ( copy )
+                getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0];
+                PC++;
+                break;
+            case (char)INSTRUCTION_TYPE::ADD: // Addition
+                getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] +
+                                                    getRegistry(currentINSTR.b[3])[0];
+                PC++;
+                break;
+            case (char)INSTRUCTION_TYPE::BEQ: // Branch if equal
+
+                break;
+            case (char)INSTRUCTION_TYPE::BNE: // Branch if not equal
+
                 break;
         }
     }
