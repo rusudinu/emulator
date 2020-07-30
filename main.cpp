@@ -3,7 +3,11 @@
 #define EMULATOR_WIDTH 192
 #define EMULATOR_HEIGHT 40
 
+// Instructions per second
+#define EMULATOR_IPS 6507
+
 #include "ButtonBoard.h"
+#include "Interpreter.hpp"
 
 #include <iostream>
 
@@ -16,13 +20,16 @@ int main()
     sf::RectangleShape rectShape;
     rectShape.setFillColor(sf::Color::Yellow);
     rectShape.setPosition(200,125);
-    rectShape.setSize(sf::Vector2f(EMULATOR_WIDTH,EMULATOR_HEIGHT) *2.f);
+    rectShape.setSize(sf::Vector2f(EMULATOR_WIDTH, EMULATOR_HEIGHT) *2.f);
 
     ButtonBoard bBoard;
 
     sf::Texture bodyTexture;
     if(!bodyTexture.loadFromFile("assets/BACKGROUND.PNG")){ /* error */ }
     sf::Sprite bodySprite(bodyTexture);
+
+    Interpreter interpreter;
+    interpreter.loadROMFromFile("game.rom");
 
     while (window.isOpen())
     {
@@ -34,8 +41,7 @@ int main()
             bBoard.onEvent(event);
         }
 
-        std::cout << (int)bBoard.getInputByte() << std::endl;
-
+        // std::cout << (int)bBoard.getInputByte() << std::endl;
 
         window.clear(sf::Color::White);
         window.draw(bodySprite); //THE BODY OF THE CONSOLE
