@@ -70,6 +70,35 @@ void GUIButton::setPressed(bool isPressed){
     pressed = isPressed;
 }
 
+sf::Keyboard::Key getKeyCode( BUTTONS button ){
+    switch(button){
+        case BUTTONS::DPAD_UP:
+            return sf::Keyboard::W;
+            break;
+        case BUTTONS::DPAD_DOWN:
+            return sf::Keyboard::S;
+            break;
+        case BUTTONS::DPAD_LEFT:
+            return sf::Keyboard::A;
+            break;
+        case BUTTONS::DPAD_RIGHT:
+            return sf::Keyboard::D;
+            break;
+        case BUTTONS::COLOR_UP:
+            return sf::Keyboard::I;
+            break;
+        case BUTTONS::COLOR_DOWN:
+            return sf::Keyboard::K;
+            break;
+        case BUTTONS::COLOR_LEFT:
+            return sf::Keyboard::J;
+            break;
+        case BUTTONS::COLOR_RIGHT:
+            return sf::Keyboard::L;
+            break;
+    }
+}
+
 void GUIButton::onEvent(sf::Event event){
     if ( event.type == sf::Event::MouseButtonPressed ) {
         if ( doesPositionIntersectThis(event.mouseButton.x, event.mouseButton.y )  ) {
@@ -79,6 +108,19 @@ void GUIButton::onEvent(sf::Event event){
     }
     if ( event.type == sf::Event::MouseButtonReleased ) {
         setPressed(false);
+        return;
+    }
+    int keyCode = getKeyCode(btnType);
+    if ( event.type == sf::Event::KeyPressed ){
+        if ( event.key.code == keyCode ){
+            setPressed(true);
+        }
+        return;
+    }
+    if ( event.type == sf::Event::KeyReleased ){
+        if ( event.key.code == keyCode ){
+            setPressed(false);
+        }
         return;
     }
 }
