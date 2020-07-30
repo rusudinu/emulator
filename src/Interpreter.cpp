@@ -8,6 +8,8 @@
 Interpreter::Interpreter() {
     ROM = 0;
     renderTexture.create(EMULATOR_WIDTH, EMULATOR_HEIGHT);
+    renderTexture.clear();
+    // renderTexture.display();
 }
 
 Interpreter::~Interpreter() {
@@ -37,9 +39,49 @@ sf::RenderTexture& Interpreter::getRenderTexture() {
     return renderTexture;
 }
 
+union Instruction{
+    unsigned int int32; // 4 byte instruction
+    short h[2]; // 2 halves of 2 bytes
+    char b[4]; // 4 bytes
+};
+
+char * Interpreter::getRegistry(char index) {
+    switch(index){
+        case 0:
+            return &RA;
+        case 1:
+            return &RB;
+        case 2:
+            return &RC;
+        case 3:
+            return &RD;
+        case 4:
+            return &RE;
+        case 5:
+            return &RF;
+        default:
+            std::cout << "[ERR] Attempting to retrieve a registry that doesn't exist! " << (int)index << std::endl;
+            break;
+    }
+}
+
 void Interpreter::interpret(int instructions) {
+    Instruction currentINSTR;
     for ( int i = 0; i < instructions; i++ ){
 
+        currentINSTR.int32 = *( (unsigned int * )( ROM + PC*4 ));
+        // std::cout << currentINSTR.int32 << std::endl;
+
+        switch( currentINSTR.b[0] ){
+            case 0: // LBI
+                std::cout << "LBI " << (int)currentINSTR.b[1] << " " << (int)currentINSTR.b[2] << std::endl;
+                getRegistry(currentINSTR.b[1])[0] = currentINSTR.b[2];
+                PC++;
+                break;
+            case 8:
+                renderTexture.clear(sf::Color::Red);
+                break;
+        }
     }
 }
 

@@ -26,6 +26,13 @@ int main()
 
     Interpreter interpreter;
     interpreter.loadROMFromFile("game.rom");
+    interpreter.interpret(3);
+    sf::RenderTexture& rtex = interpreter.getRenderTexture();
+
+
+    sf::Sprite renderSprite;
+    renderSprite.setScale(2.f,2.f);
+    renderSprite.setPosition(200,125);
 
     while (window.isOpen())
     {
@@ -43,6 +50,10 @@ int main()
         window.draw(bodySprite); //THE BODY OF THE CONSOLE
         window.draw(rectShape);
         window.draw(bBoard);
+
+        rtex.display();
+        renderSprite.setTexture(rtex.getTexture());
+        window.draw(renderSprite);
         window.display();
     }
 
