@@ -13,6 +13,8 @@ int main()
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
+    window.setFramerateLimit(60);
+
     sf::RectangleShape rectShape;
     rectShape.setFillColor(sf::Color::Yellow);
     rectShape.setPosition(200,125);
@@ -26,7 +28,7 @@ int main()
 
     Interpreter interpreter;
     interpreter.loadROMFromFile("game.rom");
-    interpreter.interpret(3);
+    interpreter.interpret(EMULATOR_IPS);
     sf::RenderTexture& rtex = interpreter.getRenderTexture();
 
 
@@ -50,6 +52,10 @@ int main()
         window.draw(bodySprite); //THE BODY OF THE CONSOLE
         window.draw(rectShape);
         window.draw(bBoard);
+
+        interpreter.setInputRegister(bBoard.getInputByte());
+
+        interpreter.interpret(EMULATOR_IPS);
 
         rtex.display();
         renderSprite.setTexture(rtex.getTexture());

@@ -7,21 +7,21 @@
 class Interpreter
 {
     private:
-        char RA, RB, RC, RD, RE, RF; // General-purpose registries
-        short PC; // Program Counter Registry
-        short SP; // Stack Pointer Registry
-        short IN; // Input Registry
-        short RET; // Return Address Registry
+        unsigned char RA, RB, RC, RD, RE, RF; // General-purpose registries
+        unsigned short PC; // Program Counter Registry
+        unsigned short SP; // Stack Pointer Registry
+        unsigned short IN; // Input Registry
+        unsigned short RET; // Return Address Registry
 
         sf::RenderTexture renderTexture;
         char * ROM;
-        char * RAM;
+        unsigned char * RAM;
 
-        char * getRegistry( char index );
+        unsigned char * getRegistry( char index );
 
         sf::Color getColor( char color );
         void clearCanvas(char color);
-        void drawRectangle(char x, char y, char width, char height, char color);
+        void drawRectangle(unsigned char x, unsigned char y, unsigned char width, unsigned char height, unsigned char color);
         void drawLine(char x, char y, char tx, char ty, char color);
 
     public:

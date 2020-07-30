@@ -5,12 +5,14 @@
 
 #include "Defines.hpp"
 
+
+
 Interpreter::Interpreter() {
     ROM = 0;
     renderTexture.create(EMULATOR_WIDTH, EMULATOR_HEIGHT);
     renderTexture.clear();
     // renderTexture.display();
-    RAM = new char[EMULATOR_RAM];
+    RAM = new unsigned char[EMULATOR_RAM];
 }
 
 Interpreter::~Interpreter() {
@@ -43,15 +45,15 @@ sf::RenderTexture& Interpreter::getRenderTexture() {
 
 union Instruction{
     unsigned int int32; // 4 byte instruction
-    short h[2]; // 2 halves of 2 bytes
-    char b[4]; // 4 bytes
+    unsigned short h[2]; // 2 halves of 2 bytes
+    unsigned char b[4]; // 4 bytes
 };
 
 enum class REG_TYPE{
     RA, RB, RC, RD, RE, RF, PC, SP, IN, RET
 };
 
-char * Interpreter::getRegistry(char index) {
+unsigned char * Interpreter::getRegistry(char index) {
     switch(index){
         case (char)REG_TYPE::RA:
             return &RA;
@@ -65,6 +67,18 @@ char * Interpreter::getRegistry(char index) {
             return &RE;
         case (char)REG_TYPE::RF:
             return &RF;
+        /* // NEED MOVH / MOVL ( for Highs and Lows )
+        case (char)REG_TYPE::PC:
+            return &PC;
+        case (char)REG_TYPE::SP:
+            return &SP;
+        */
+        case (char)REG_TYPE::IN:
+            return ((unsigned char *) &IN); // HOTFIX TO TEST SOMETHING. TODO : CHANGE PROPERLY!
+        /* // NEED MOVH / MOVL ( for Highs and Lows )
+        case (char)REG_TYPE::RET:
+            return &RET;
+        */
         default:
             std::cout << "[ERR] Attempting to retrieve a registry that doesn't exist! " << (int)index << std::endl;
             break;
@@ -92,7 +106,9 @@ void Interpreter::interpret(int instructions) {
 
         switch( currentINSTR.b[0] ){
             case (char)INSTRUCTION_TYPE::LBI: // Load Byte Immediate Value
+                #ifdef VERBOSE
                 std::cout << "LBI " << (int)currentINSTR.b[1] << " " << (int)currentINSTR.b[2] << std::endl;
+                #endif // VERBOSE
                 getRegistry(currentINSTR.b[1])[0] = currentINSTR.b[2];
                 PC++;
                 break;
@@ -108,23 +124,49 @@ void Interpreter::interpret(int instructions) {
                 RET = PC+1;
                 label.BYTE[0] = currentINSTR.b[2];
                 label.BYTE[1] = currentINSTR.b[3];
+                #ifdef VERBOSE
                 std::cout << "CALL to instruction " << label.SHORT << std::endl;
+                #endif // VERBOSE
                 PC = label.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
                 label.BYTE[0] = currentINSTR.b[2];
                 label.BYTE[1] = currentINSTR.b[3];
+                #ifdef VERBOSE
                 std::cout << "JUMP to instruction " << label.SHORT << std::endl;
+                #endif // VERBOSE
                 PC = label.SHORT;
                 break;
-            case (char)INSTRUCTION_TYPE::SYSCALL: // System Call
+            case (char)INSTRUCTION_TYPE::SYSCALL:{ // System Call
+                #ifdef VERBOSE
+                std::cout << "SYSCALL " << (int)RA << std::endl;
+                #endif // VERBOSE
+                unsigned char SYSCODE = RA;
 
+                switch(SYSCODE){
+                    case 1: // DRAW RECTANGLE
+                        drawRectangle(RB,RC,RD,RE,RF);
+                        break;
+                    case 255: // HALT
+                        i = instructions;
+                        break;
+                    default:
+                        std::cout << "WARNING! Unkown SYSCODE " << (int)SYSCODE << std::endl;
+                }
+                PC++;
                 break;
+            }
             case (char)INSTRUCTION_TYPE::MOV: // Move byte ( copy )
+                #ifdef VERBOSE
+                std::cout << "MOV " << (int)getRegistry(currentINSTR.b[1])[0] << " " << (int)getRegistry(currentINSTR.b[2])[0] << std::endl;
+                #endif // VERBOSE
                 getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::ADD: // Addition
+                #ifdef VERBOSE
+                std::cout << "ADD " << (int)getRegistry(currentINSTR.b[2])[0] << " + " << (int)getRegistry(currentINSTR.b[3])[0] << std::endl;
+                #endif // VERBOSE
                 getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] +
                                                     getRegistry(currentINSTR.b[3])[0];
                 PC++;
@@ -147,8 +189,18 @@ void Interpreter::clearCanvas( char color ) {
     renderTexture.clear();
 }
 
-void Interpreter::drawRectangle(char x, char y, char width, char height, char color) {
+sf::RectangleShape rectShapeStencil(sf::Vector2f(120, 50));
 
+void Interpreter::drawRectangle(unsigned char x, unsigned char y, unsigned char width, unsigned char height, unsigned char color) {
+    int X = x;
+    int Y = y;
+    int W = width;
+    int H = height;
+    sf::Color C = getColor(color);
+    rectShapeStencil.setPosition(X,Y);
+    rectShapeStencil.setSize(sf::Vector2f(W,H));
+    rectShapeStencil.setFillColor(C);
+    renderTexture.draw(rectShapeStencil);
 }
 
 void Interpreter::drawLine(char x, char y, char tx, char ty, char color) {
