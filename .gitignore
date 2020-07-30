@@ -4,3 +4,5 @@ obj/
 *.layout
 *.depend
 *.dll
+*.rom
+*.bak
