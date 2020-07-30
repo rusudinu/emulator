@@ -1,7 +1,7 @@
 #include "ButtonBoard.h"
 
-int buttonXes[] = {130, 90, 40, 180, 600, 600, 600, 600};
-int buttonYes[] = {90, 230, 140, 180, 50, 80, 110, 140};
+int buttonXes[] = {130, 90, 40, 180, 650, 650, 610, 690};
+int buttonYes[] = {90, 230, 140, 180, 100, 180, 140, 140};
 
 ButtonBoard::ButtonBoard()
 {
