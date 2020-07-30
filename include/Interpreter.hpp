@@ -16,6 +16,7 @@ class Interpreter
         sf::RenderTexture renderTexture;
         char * ROM;
 
+        sf::Color getColor( char color );
         void clearCanvas(char color);
         void drawRectangle(char x, char y, char width, char height, char color);
         void drawLine(char x, char y, char tx, char ty, char color);

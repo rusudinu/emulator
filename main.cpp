@@ -1,10 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#define EMULATOR_WIDTH 192
-#define EMULATOR_HEIGHT 40
-
-// Instructions per second
-#define EMULATOR_IPS 6507
+#include "Defines.hpp"
 
 #include "ButtonBoard.h"
 #include "Interpreter.hpp"
