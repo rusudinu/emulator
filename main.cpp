@@ -15,11 +15,46 @@ int main()
     rectShape.setSize(sf::Vector2f(EMULATOR_WIDTH,EMULATOR_HEIGHT) *2.f);
 
 
+    /**************************  THE BODY OF THE CONSOLE **************************/
     sf::Texture bodyTexture;
     if(!bodyTexture.loadFromFile("assets/BACKGROUND.PNG")){
     // Handle an error.
     }
     sf::Sprite bodySprite(bodyTexture);
+    /**************************  THE BODY OF THE CONSOLE **************************/
+
+
+    /**************************  THE LEFT BUTTONS OF THE CONSOLE **************************/
+
+    /**************************  THE LEFT BUTTONS OF THE CONSOLE **************************/
+
+    /**************************  THE RIGHT BUTTONS OF THE CONSOLE **************************/
+     sf::Texture greenButtonTexture;
+     sf::Texture blueButtonTexture;
+     sf::Texture pinkButtonTexture;
+     sf::Texture redButtonTexture;
+
+    if(!greenButtonTexture.loadFromFile("assets/buttonsRight/BACKGROUND.PNG")){
+    // Handle an error.
+    }
+
+    if(!blueButtonTexture.loadFromFile("assets/BACKGROUND.PNG")){
+    // Handle an error.
+    }
+    if(!pinkButtonTexture.loadFromFile("assets/BACKGROUND.PNG")){
+    // Handle an error.
+    }
+
+    if(!redButtonTexture.loadFromFile("assets/BACKGROUND.PNG")){
+    // Handle an error.
+    }
+
+    sf::Sprite greenButtonSprite(greenButtonTexture);
+    sf::Sprite blueButtonSprite(blueButtonTexture);
+    sf::Sprite pinkButtonSprite(pinkButtonTexture);
+    sf::Sprite redButtonSprite(redButtonTexture);
+    /**************************  THE RIGHT BUTTONS OF THE CONSOLE **************************/
+
 
     while (window.isOpen())
     {
@@ -31,8 +66,8 @@ int main()
         }
 
 
-        window.clear();
-        window.draw(bodySprite);
+        window.clear(sf::Color::White);
+        window.draw(bodySprite); //THE BODY OF THE CONSOLE
         window.draw(rectShape);
         window.display();
     }
