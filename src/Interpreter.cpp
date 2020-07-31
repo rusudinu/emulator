@@ -5,7 +5,7 @@
 
 #include "Defines.hpp"
 
-#define VERBOSE
+//#define VERBOSE
 
 void Interpreter::updateSP()
 {
