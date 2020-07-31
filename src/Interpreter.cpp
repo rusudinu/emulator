@@ -43,6 +43,8 @@ union LABEL{
     unsigned char BYTE[2];
 };
 
+LABEL PCStart;
+
 bool Interpreter::loadROMFromFile(std::string path) {
     std::ifstream file(path.c_str(), std::ios::binary | std::ios::ate);
     if (!file){
@@ -61,7 +63,6 @@ bool Interpreter::loadROMFromFile(std::string path) {
             LABEL ROMHeader;
             ROMHeader.SHORT = ((unsigned short int *)ROM)[0];
 
-            LABEL PCStart;
             PCStart.BYTE[1] = ROMHeader.BYTE[0];
             PCStart.BYTE[0] = ROMHeader.BYTE[1];
             std::cout << "STARTING AT LINE " <<  PCStart.SHORT << std::endl;
@@ -174,15 +175,16 @@ void Interpreter::interpret(int instructions) {
                 //#ifdef VERBOSE
                 std::cout << "CALL to instruction " << label.SHORT << std::endl;
                 //#endif // VERBOSE
-                PC = label.SHORT;
+                PC = label.SHORT + PCStart.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
+
+                PC = label.SHORT + PCStart.SHORT;
                 #ifdef VERBOSE
-                std::cout << "JUMP to instruction " << label.SHORT << std::endl;
+                std::cout << "JUMP to instruction " << PCStart.SHORT << " " << label.SHORT << std::endl;
                 #endif // VERBOSE
-                PC = label.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::SYSCALL:{ // System Call
                 #ifdef VERBOSE
