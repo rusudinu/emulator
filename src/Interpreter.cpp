@@ -5,7 +5,7 @@
 
 #include "Defines.hpp"
 
-//#define VERBOSE
+// #define VERBOSE
 
 void Interpreter::updateSP()
 {
@@ -32,6 +32,11 @@ Interpreter::~Interpreter() {
     delete RAM;
 }
 
+union LABEL{
+    unsigned short int SHORT;
+    unsigned char BYTE[2];
+};
+
 bool Interpreter::loadROMFromFile(std::string path) {
     std::ifstream file(path.c_str(), std::ios::binary | std::ios::ate);
     if (!file){
@@ -46,6 +51,16 @@ bool Interpreter::loadROMFromFile(std::string path) {
         if (file.read(ROM, size))
         {
             std::cout << "[ROM] Loaded : " << size << " bytes." << std::endl;
+
+            LABEL ROMHeader;
+            ROMHeader.SHORT = ((unsigned short int *)ROM)[0];
+
+            LABEL PCStart;
+            PCStart.BYTE[1] = ROMHeader.BYTE[0];
+            PCStart.BYTE[0] = ROMHeader.BYTE[1];
+            std::cout << "STARTING AT LINE " <<  PCStart.SHORT << std::endl;
+            PC = PCStart.SHORT;
+
             return true;
         }
     }
@@ -119,11 +134,6 @@ unsigned char * Interpreter::getRegistry(char index) {
 enum class INSTRUCTION_TYPE
 {
     LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT, SBIX, LBIX, JRT, PUSH, POP, RRA, RRB, RRC, RRD, RRE, RRF, XOR
-};
-
-union LABEL{
-    unsigned short int SHORT;
-    unsigned char BYTE[2];
 };
 
 void Interpreter::interpret(int instructions) {
