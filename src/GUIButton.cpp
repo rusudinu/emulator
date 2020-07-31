@@ -28,19 +28,19 @@ GUIButton::GUIButton( BUTTONS button, sf::Vector2f position )
             setRotation(180);
             break;
         case BUTTONS::COLOR_UP:
-            backgroundTex.loadFromFile("assets/buttons right/BP.PNG");
+            backgroundTex.loadFromFile("assets/buttons right/BRTP.PNG");
             pressedTex.loadFromFile("assets/buttons right/BRT.PNG");
             break;
         case BUTTONS::COLOR_DOWN:
-            backgroundTex.loadFromFile("assets/buttons right/BP.PNG");
+            backgroundTex.loadFromFile("assets/buttons right/BRBP.PNG");
             pressedTex.loadFromFile("assets/buttons right/BRB.PNG");
             break;
         case BUTTONS::COLOR_LEFT:
-            backgroundTex.loadFromFile("assets/buttons right/BP.PNG");
+            backgroundTex.loadFromFile("assets/buttons right/BRLP.PNG");
             pressedTex.loadFromFile("assets/buttons right/BRL.PNG");
             break;
         case BUTTONS::COLOR_RIGHT:
-            backgroundTex.loadFromFile("assets/buttons right/BP.PNG");
+            backgroundTex.loadFromFile("assets/buttons right/BRRP.PNG");
             pressedTex.loadFromFile("assets/buttons right/BRR.PNG");
             break;
     }
