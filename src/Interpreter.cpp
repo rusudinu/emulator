@@ -87,7 +87,7 @@ unsigned char * Interpreter::getRegistry(char index) {
 
 enum class INSTRUCTION_TYPE
 {
-    LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT
+    LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT, SBIX, LBIX, XOR, JRT, PUSH, POP, RRA, RRB, RRC, RRD, RRE, RRF
 };
 
 union LABEL{
@@ -177,6 +177,54 @@ void Interpreter::interpret(int instructions) {
             case (char)INSTRUCTION_TYPE::BNE: // Branch if not equal
 
                 break;
+            case (char)INSTRUCTION_TYPE::BGE: // Branch if greater or equal
+
+                break;
+            case (char)INSTRUCTION_TYPE::BLE: // Branch if less or equal
+
+                break;
+            case (char)INSTRUCTION_TYPE::BGT: // Branch if greater than
+
+                break;
+            case (char)INSTRUCTION_TYPE::BLT: // Branch if less than
+
+                break;
+            case (char)INSTRUCTION_TYPE::SBIX: // Store byte immediate value
+
+                break;
+            case (char)INSTRUCTION_TYPE::LBIX: // Load byte immediate value
+
+                break;
+            case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
+
+                break;
+            case (char)INSTRUCTION_TYPE::JRT: // JUMP to RET value
+
+                break;
+            case (char)INSTRUCTION_TYPE::PUSH: // PUSH Register to stack
+
+                break;
+            case (char)INSTRUCTION_TYPE::POP: // POP Register from stack
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRA: // Load from ROM into RA
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRB: // Load from ROM into RB
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRC: // Load from ROM into RC
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRD: // Load from ROM into RD
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRE: // Load from ROM into RE
+
+                break;
+            case (char)INSTRUCTION_TYPE::RRF: // Load from ROM into RF
+
+                break;
         }
     }
 }
@@ -207,14 +255,14 @@ void Interpreter::drawLine(char x, char y, char tx, char ty, char color) {
 
 }
 
-sf::Color c0 = sf::Color(100,100,100);// 0111
-sf::Color c1 = sf::Color(100,100,100);// 1000
-sf::Color c2 = sf::Color(100,100,100);// 1001
-sf::Color c3 = sf::Color(100,100,100);// 1010
-sf::Color c4 = sf::Color(100,100,100);// 1011
-sf::Color c5 = sf::Color(100,100,100);// 1100
-sf::Color c6 = sf::Color(100,100,100);// 1101
-sf::Color c7 = sf::Color(100,100,100);// 1110
+sf::Color c0 = sf::Color(16,16,16);// 0111
+sf::Color c1 = sf::Color(32,32,32);// 1000
+sf::Color c2 = sf::Color(48,48,48);// 1001
+sf::Color c3 = sf::Color(64,64,64);// 1010
+sf::Color c4 = sf::Color(80,80,80);// 1011
+sf::Color c5 = sf::Color(96,96,96);// 1100
+sf::Color c6 = sf::Color(112,112,112);// 1101
+sf::Color c7 = sf::Color(128,128,128);// 1110
 
 sf::Color pallette[] = {
     sf::Color::Black,             // 0000
