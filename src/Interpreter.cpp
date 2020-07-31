@@ -172,22 +172,46 @@ void Interpreter::interpret(int instructions) {
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::BEQ: // Branch if equal
-
+                if ( getRegistry(currentINSTR.b[1])[0] == getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::BNE: // Branch if not equal
-
+                if ( getRegistry(currentINSTR.b[1])[0] != getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::BGE: // Branch if greater or equal
-
+                if ( getRegistry(currentINSTR.b[1])[0] >= getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::BLE: // Branch if less or equal
-
+                if ( getRegistry(currentINSTR.b[1])[0] <= getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::BGT: // Branch if greater than
-
+                if ( getRegistry(currentINSTR.b[1])[0] > getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::BLT: // Branch if less than
-
+                if ( getRegistry(currentINSTR.b[1])[0] < getRegistry(currentINSTR.b[2])[0] ){
+                    PC++;
+                } else {
+                    PC += 2;
+                }
                 break;
             case (char)INSTRUCTION_TYPE::SBIX: // Store byte immediate value
 
