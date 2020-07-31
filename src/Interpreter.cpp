@@ -214,10 +214,10 @@ void Interpreter::interpret(int instructions) {
                 }
                 break;
             case (char)INSTRUCTION_TYPE::SBIX: // Store byte immediate value
-
+                RAM[currentINSTR.b[2]] = getRegistry(currentINSTR.b[1])[0];
                 break;
             case (char)INSTRUCTION_TYPE::LBIX: // Load byte immediate value
-
+                getRegistry(currentINSTR.b[1])[0] = RAM[currentINSTR.b[2]];
                 break;
             case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
 
