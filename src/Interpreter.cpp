@@ -27,6 +27,7 @@ bool Interpreter::loadROMFromFile(std::string path) {
     std::ifstream file(path.c_str(), std::ios::binary | std::ios::ate);
     if (!file){
         std::cout << "[ROM] failed to load : " << path << std::endl;
+        return false;
     } else {
         std::streamsize size = file.tellg();
         file.seekg(0, std::ios::beg);
@@ -36,8 +37,10 @@ bool Interpreter::loadROMFromFile(std::string path) {
         if (file.read(ROM, size))
         {
             std::cout << "[ROM] Loaded : " << size << " bytes." << std::endl;
+            return true;
         }
     }
+    return true;
 }
 
 sf::RenderTexture& Interpreter::getRenderTexture() {
@@ -261,7 +264,8 @@ void Interpreter::interpret(int instructions) {
                 PC++;
                 break;
             }
-            case (char)INSTRUCTION_TYPE::POP: // POP Register from stack
+            case (char)INSTRUCTION_TYPE::POP:{ // POP Register from stack
+                unsigned char * specialREG = getSpecialRegistry(currentINSTR.b[1]);
 
                 if ( specialREG == 0 ) { // If not a special registry
                     unsigned char * gpREG = getRegistry(currentINSTR.b[1]);
@@ -280,6 +284,7 @@ void Interpreter::interpret(int instructions) {
 
                 PC++;
                 break;
+            }
             case (char)INSTRUCTION_TYPE::RRA: // Load from ROM into RA
                 // RRA REG, VALUE -> VALUE=2 bytes
                 // INSTRCODE REG VALUE_HIGH VALUE_LOW
