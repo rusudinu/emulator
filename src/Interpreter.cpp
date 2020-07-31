@@ -122,16 +122,16 @@ void Interpreter::interpret(int instructions) {
                 break;
             case (char)INSTRUCTION_TYPE::CALL: // Call Subroutine
                 RET = PC+1;
-                label.BYTE[0] = currentINSTR.b[2];
-                label.BYTE[1] = currentINSTR.b[3];
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
                 #ifdef VERBOSE
                 std::cout << "CALL to instruction " << label.SHORT << std::endl;
                 #endif // VERBOSE
                 PC = label.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
-                label.BYTE[0] = currentINSTR.b[2];
-                label.BYTE[1] = currentINSTR.b[3];
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
                 #ifdef VERBOSE
                 std::cout << "JUMP to instruction " << label.SHORT << std::endl;
                 #endif // VERBOSE
