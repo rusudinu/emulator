@@ -20,6 +20,8 @@ class Interpreter
         unsigned char * getSpecialRegistry(char index);
         unsigned char * getRegistry( char index );
 
+        short stackPointer;
+
         sf::Color getColor( char color );
         void clearCanvas(char color);
         void drawRectangle(unsigned char x, unsigned char y, unsigned char width, unsigned char height, unsigned char color);

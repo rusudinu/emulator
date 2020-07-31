@@ -13,6 +13,7 @@ Interpreter::Interpreter() {
     renderTexture.clear();
     // renderTexture.display();
     RAM = new unsigned char[EMULATOR_RAM];
+    stackPointer = EMULATOR_RAM;
 }
 
 Interpreter::~Interpreter() {
@@ -56,13 +57,13 @@ enum class REG_TYPE{
 unsigned char * Interpreter::getSpecialRegistry(char index) {
     switch(index){
         case (char)REG_TYPE::PC:
-            return &PC;
+            return ((unsigned char *) &PC);
             break;
         case (char)REG_TYPE::SP:
-            return &SP;
+            return ((unsigned char *) &SP);
             break;
         case (char)REG_TYPE::RET:
-            return &RET;
+            return ((unsigned char *) &RET);
             break;
         default:
             return 0;
@@ -247,11 +248,44 @@ void Interpreter::interpret(int instructions) {
             case (char)INSTRUCTION_TYPE::JRT: // JUMP to RET value
                 PC = RET;
                 break;
-            case (char)INSTRUCTION_TYPE::PUSH: // PUSH Register to stack
+            case (char)INSTRUCTION_TYPE::PUSH:{ // PUSH Register to stack
+                unsigned char * specialREG = getSpecialRegistry(currentINSTR.b[1]);
 
+                if ( specialREG == 0 ) { // If not a special registry
+                    stackPointer -= 1;
+                    if ( stackPointer < 0 ){ std::cout << "STACK OVERFLOW" << std::endl; }
+                    unsigned char * gpREG = getRegistry(currentINSTR.b[1]);
+                    RAM[stackPointer] = gpREG[0];
+                } else { // If a special registry
+                    stackPointer -= 2;
+                    if ( stackPointer < 0 ){ std::cout << "STACK OVERFLOW" << std::endl; }
+                    RAM[stackPointer + 1] = specialREG[0];
+                    RAM[stackPointer] = specialREG[1];
+                }
+
+                PC++;
                 break;
+            }
             case (char)INSTRUCTION_TYPE::POP: // POP Register from stack
 
+                if ( specialREG == 0 ) { // If not a special registry
+
+
+                    unsigned char * gpREG = getRegistry(currentINSTR.b[1]);
+                    gpREG[0] = RAM[stackPointer];
+
+                    stackPointer += 1;
+                    if ( stackPointer > EMULATOR_RAM ){ std::cout << "STACK UNDERFLOW" << std::endl; }
+                } else { // If a special registry
+
+                    specialREG[0] = RAM[stackPointer + 1];
+                    specialREG[1] = RAM[stackPointer];
+
+                    stackPointer += 2;
+                    if ( stackPointer > EMULATOR_RAM ){ std::cout << "STACK UNDERFLOW" << std::endl; }
+                }
+
+                PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRA: // Load from ROM into RA
                 // RRA REG, VALUE -> VALUE=2 bytes
