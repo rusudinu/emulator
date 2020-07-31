@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include <string>
+#include <sstream>
 
 std::string getStringFromByte( unsigned char b ){
 
@@ -64,27 +64,39 @@ int main()
     unsigned char bbb = 0b00011010;
     inputByteText.setString( getStringFromByte(bbb) );
     inputByteText.setFillColor(sf::Color::Black);
-    inputByteText.setPosition(70,330);
+    inputByteText.setPosition(70,360);
 
 
     sf::Text inputByteLabel;
     inputByteLabel.setFont(debugFont);
     inputByteLabel.setString( "IN = " );
     inputByteLabel.setFillColor(sf::Color::Black);
-    inputByteLabel.setPosition(0,330);
+    inputByteLabel.setPosition(0,360);
 
     sf::Text stackPointerText;
     stackPointerText.setFont(debugFont);
     stackPointerText.setString( getStringFromByte(bbb) );
     stackPointerText.setFillColor(sf::Color::Black);
-    stackPointerText.setPosition(70,360);
+    stackPointerText.setPosition(70,390);
 
 
     sf::Text stackPointerLabel;
     stackPointerLabel.setFont(debugFont);
     stackPointerLabel.setString( "SP = " );
     stackPointerLabel.setFillColor(sf::Color::Black);
-    stackPointerLabel.setPosition(0,360);
+    stackPointerLabel.setPosition(0,390);
+
+
+    sf::Text fpsDisplay;
+    fpsDisplay.setFont(debugFont);
+    fpsDisplay.setString( "FPS" );
+    fpsDisplay.setFillColor(sf::Color::Black);
+    fpsDisplay.setPosition(0,330);
+
+
+    sf::Clock renderClock;
+    sf::Time time;
+
 
     while (window.isOpen())
     {
@@ -106,9 +118,24 @@ int main()
         interpreter.setInputRegister(bBoard.getInputByte());
         inputByteText.setString( getStringFromByte(bBoard.getInputByte()) );
 
+        interpreter.interpret(EMULATOR_IPS);
+
         stackPointerText.setString( getStringFromByte(interpreter.getSP()) );
 
-        interpreter.interpret(EMULATOR_IPS);
+        /*
+        float currentTime = clock.restart().asSeconds();
+        float fps = 1.f / (currentTime - lastTime);
+        lastTime = currentTime;
+        */
+
+        //std::cout << fps << std::endl;
+
+        time = renderClock.getElapsedTime();
+        float fFps = 1000000 / time.asMicroseconds();
+        std::stringstream s;
+        s << fFps << " fps";
+        fpsDisplay.setString(s.str());
+        renderClock.restart();
 
         rtex.display();
         renderSprite.setTexture(rtex.getTexture());
@@ -117,6 +144,7 @@ int main()
         window.draw(inputByteLabel);
         window.draw(stackPointerText);
         window.draw(stackPointerLabel);
+        window.draw(fpsDisplay);
         window.display();
 
     }
