@@ -5,7 +5,12 @@
 
 #include "Defines.hpp"
 
+#define VERBOSE
 
+void Interpreter::updateSP()
+{
+    SP = stackPointer & 0b111111111111111;
+}
 
 Interpreter::Interpreter() {
     ROM = 0;
@@ -14,6 +19,10 @@ Interpreter::Interpreter() {
     // renderTexture.display();
     RAM = new unsigned char[EMULATOR_RAM];
     stackPointer = EMULATOR_RAM;
+    RA = RB = RC = RD = RE = RF = 0;
+    PC = 0;
+    updateSP();
+    RET = 0;
 }
 
 Interpreter::~Interpreter() {
@@ -146,9 +155,9 @@ void Interpreter::interpret(int instructions) {
                 RET = PC+1;
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                #ifdef VERBOSE
+                //#ifdef VERBOSE
                 std::cout << "CALL to instruction " << label.SHORT << std::endl;
-                #endif // VERBOSE
+                //#endif // VERBOSE
                 PC = label.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
@@ -261,6 +270,7 @@ void Interpreter::interpret(int instructions) {
                     RAM[stackPointer] = specialREG[1];
                 }
 
+                updateSP();
                 PC++;
                 break;
             }
@@ -282,6 +292,7 @@ void Interpreter::interpret(int instructions) {
                     if ( stackPointer > EMULATOR_RAM ){ std::cout << "STACK UNDERFLOW" << std::endl; }
                 }
 
+                updateSP();
                 PC++;
                 break;
             }
@@ -324,6 +335,7 @@ void Interpreter::interpret(int instructions) {
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
+                std::cout << "XOR : " << getRegistry(currentINSTR.b[2])[0] << ' ' << getRegistry(currentINSTR.b[3])[0] << std::endl;
                 getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] ^
                                                     getRegistry(currentINSTR.b[3])[0];
                 PC++;

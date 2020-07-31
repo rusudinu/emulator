@@ -17,6 +17,8 @@ class Interpreter
         char * ROM;
         unsigned char * RAM;
 
+        void updateSP();
+
         unsigned char * getSpecialRegistry(char index);
         unsigned char * getRegistry( char index );
 
