@@ -223,7 +223,7 @@ void Interpreter::interpret(int instructions) {
 
                 break;
             case (char)INSTRUCTION_TYPE::JRT: // JUMP to RET value
-
+                PC = RET;
                 break;
             case (char)INSTRUCTION_TYPE::PUSH: // PUSH Register to stack
 
