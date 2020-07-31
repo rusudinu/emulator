@@ -161,7 +161,7 @@ void Interpreter::interpret(int instructions) {
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::LB: // Load Byte
-                getRegistry(currentINSTR.b[1])[0] = RAM[currentINSTR.b[2]];
+                getRegistry(currentINSTR.b[1])[0] = RAM[getRegistry(currentINSTR.b[2])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::SB: // Store Byte
@@ -172,9 +172,9 @@ void Interpreter::interpret(int instructions) {
                 RET = PC+1;
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                //#ifdef VERBOSE
+                #ifdef VERBOSE
                 std::cout << "CALL to instruction " << label.SHORT << std::endl;
-                //#endif // VERBOSE
+                #endif // VERBOSE
                 PC = label.SHORT + PCStart.SHORT;
                 break;
             case (char)INSTRUCTION_TYPE::JUMP: // Jump to label
@@ -223,8 +223,10 @@ void Interpreter::interpret(int instructions) {
             case (char)INSTRUCTION_TYPE::BEQ: // Branch if equal
                 if ( getRegistry(currentINSTR.b[1])[0] == getRegistry(currentINSTR.b[2])[0] ){
                     PC++;
+                    //std::cout << "BRANCHED CLOSE" << std::endl;
                 } else {
                     PC += 2;
+                    //std::cout << "BRANCHED FAR" << std::endl;
                 }
                 break;
             case (char)INSTRUCTION_TYPE::BNE: // Branch if not equal
@@ -249,10 +251,13 @@ void Interpreter::interpret(int instructions) {
                 }
                 break;
             case (char)INSTRUCTION_TYPE::BGT: // Branch if greater than
+                //std::cout << "BGT : " << (int)getRegistry(currentINSTR.b[1])[0] << " " << (int)getRegistry(currentINSTR.b[2])[0] << std::endl;
                 if ( getRegistry(currentINSTR.b[1])[0] > getRegistry(currentINSTR.b[2])[0] ){
                     PC++;
+                    //std::cout << "BRANCHED CLOSE" << std::endl;
                 } else {
                     PC += 2;
+                    //std::cout << "BRANCHED FAR" << std::endl;
                 }
                 break;
             case (char)INSTRUCTION_TYPE::BLT: // Branch if less than
@@ -319,41 +324,42 @@ void Interpreter::interpret(int instructions) {
                 // INSTRCODE REG VALUE_HIGH VALUE_LOW
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RA = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                RA = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRB: // Load from ROM into RB
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RB = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                RB = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRC: // Load from ROM into RC
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RC = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                RC = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRD: // Load from ROM into RD
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RD = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                RD = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRE: // Load from ROM into RE
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RE = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                RE = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::RRF: // Load from ROM into RF
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
-                RF = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                std::cout<< "RRF " << label.SHORT << " " << (unsigned short)getRegistry(currentINSTR.b[1])[0] << std::endl;
+                RF = ROM[4 + label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
-                std::cout << "XOR : " << getRegistry(currentINSTR.b[2])[0] << ' ' << getRegistry(currentINSTR.b[3])[0] << std::endl;
+                // std::cout << "XOR : " << (int)getRegistry(currentINSTR.b[2])[0] << ' ' << (int)getRegistry(currentINSTR.b[3])[0] << std::endl;
                 getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] ^
                                                     getRegistry(currentINSTR.b[3])[0];
                 PC++;
