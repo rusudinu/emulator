@@ -222,7 +222,9 @@ void Interpreter::interpret(int instructions) {
                 PC++;
                 break;
             case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
-
+                getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] ^
+                                                    getRegistry(currentINSTR.b[3])[0];
+                PC++;
                 break;
             case (char)INSTRUCTION_TYPE::JRT: // JUMP to RET value
                 PC = RET;
