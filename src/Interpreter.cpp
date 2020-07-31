@@ -106,7 +106,7 @@ unsigned char * Interpreter::getRegistry(char index) {
 
 enum class INSTRUCTION_TYPE
 {
-    LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT, SBIX, LBIX, XOR, JRT, PUSH, POP, RRA, RRB, RRC, RRD, RRE, RRF
+    LBI, LB, SB, CALL, JUMP, SYSCALL, MOV, ADD, BEQ, BNE, BGE, BLE, BGT, BLT, SBIX, LBIX, JRT, PUSH, POP, RRA, RRB, RRC, RRD, RRE, RRF, XOR
 };
 
 union LABEL{
@@ -240,11 +240,6 @@ void Interpreter::interpret(int instructions) {
                 getRegistry(currentINSTR.b[1])[0] = RAM[currentINSTR.b[2]];
                 PC++;
                 break;
-            case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
-                getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] ^
-                                                    getRegistry(currentINSTR.b[3])[0];
-                PC++;
-                break;
             case (char)INSTRUCTION_TYPE::JRT: // JUMP to RET value
                 PC = RET;
                 break;
@@ -269,8 +264,6 @@ void Interpreter::interpret(int instructions) {
             case (char)INSTRUCTION_TYPE::POP: // POP Register from stack
 
                 if ( specialREG == 0 ) { // If not a special registry
-
-
                     unsigned char * gpREG = getRegistry(currentINSTR.b[1]);
                     gpREG[0] = RAM[stackPointer];
 
@@ -323,6 +316,11 @@ void Interpreter::interpret(int instructions) {
                 label.BYTE[1] = currentINSTR.b[2];
                 label.BYTE[0] = currentINSTR.b[3];
                 RF = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
+                PC++;
+                break;
+            case (char)INSTRUCTION_TYPE::XOR: // XOR operation on three registers
+                getRegistry(currentINSTR.b[1])[0] = getRegistry(currentINSTR.b[2])[0] ^
+                                                    getRegistry(currentINSTR.b[3])[0];
                 PC++;
                 break;
         }
