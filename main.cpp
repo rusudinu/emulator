@@ -30,7 +30,7 @@ std::string getStringFromByte( unsigned char b ){
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(780, 532), "Atari 2600");
+    sf::RenderWindow window(sf::VideoMode(780, 532), "ACeTare 2600 PLUS PRO MAX");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
