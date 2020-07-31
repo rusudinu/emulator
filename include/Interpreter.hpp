@@ -36,6 +36,7 @@ class Interpreter
         sf::RenderTexture& getRenderTexture();
         void interpret(int instructions);
         void setInputRegister( char inputByte );
+        unsigned short getSP();
 };
 
 #endif // INTERPRETER_HPP

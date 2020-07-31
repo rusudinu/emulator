@@ -12,6 +12,12 @@ void Interpreter::updateSP()
     SP = stackPointer & 0b111111111111111;
 }
 
+unsigned short Interpreter::getSP()
+{
+    return SP;
+}
+
+
 Interpreter::Interpreter() {
     ROM = 0;
     renderTexture.create(EMULATOR_WIDTH, EMULATOR_HEIGHT);

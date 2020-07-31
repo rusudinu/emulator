@@ -73,6 +73,19 @@ int main()
     inputByteLabel.setFillColor(sf::Color::Black);
     inputByteLabel.setPosition(0,330);
 
+    sf::Text stackPointerText;
+    stackPointerText.setFont(debugFont);
+    stackPointerText.setString( getStringFromByte(bbb) );
+    stackPointerText.setFillColor(sf::Color::Black);
+    stackPointerText.setPosition(70,360);
+
+
+    sf::Text stackPointerLabel;
+    stackPointerLabel.setFont(debugFont);
+    stackPointerLabel.setString( "SP = " );
+    stackPointerLabel.setFillColor(sf::Color::Black);
+    stackPointerLabel.setPosition(0,360);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -93,6 +106,8 @@ int main()
         interpreter.setInputRegister(bBoard.getInputByte());
         inputByteText.setString( getStringFromByte(bBoard.getInputByte()) );
 
+        stackPointerText.setString( getStringFromByte(interpreter.getSP()) );
+
         interpreter.interpret(EMULATOR_IPS);
 
         rtex.display();
@@ -100,6 +115,8 @@ int main()
         window.draw(renderSprite);
         window.draw(inputByteText);
         window.draw(inputByteLabel);
+        window.draw(stackPointerText);
+        window.draw(stackPointerLabel);
         window.display();
 
     }
