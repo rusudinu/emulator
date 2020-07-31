@@ -232,22 +232,36 @@ void Interpreter::interpret(int instructions) {
 
                 break;
             case (char)INSTRUCTION_TYPE::RRA: // Load from ROM into RA
-
+                // RRA REG, VALUE -> VALUE=2 bytes
+                // INSTRCODE REG VALUE_HIGH VALUE_LOW
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RA = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
             case (char)INSTRUCTION_TYPE::RRB: // Load from ROM into RB
-
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RB = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
             case (char)INSTRUCTION_TYPE::RRC: // Load from ROM into RC
-
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RC = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
             case (char)INSTRUCTION_TYPE::RRD: // Load from ROM into RD
-
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RD = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
             case (char)INSTRUCTION_TYPE::RRE: // Load from ROM into RE
-
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RE = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
             case (char)INSTRUCTION_TYPE::RRF: // Load from ROM into RF
-
+                label.BYTE[1] = currentINSTR.b[2];
+                label.BYTE[0] = currentINSTR.b[3];
+                RF = ROM[label.SHORT + (unsigned short)getRegistry(currentINSTR.b[1])[0]];
                 break;
         }
     }
