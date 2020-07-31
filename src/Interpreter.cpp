@@ -53,6 +53,23 @@ enum class REG_TYPE{
     RA, RB, RC, RD, RE, RF, PC, SP, IN, RET
 };
 
+unsigned char * Interpreter::getSpecialRegistry(char index) {
+    switch(index){
+        case (char)REG_TYPE::PC:
+            return &PC;
+            break;
+        case (char)REG_TYPE::SP:
+            return &SP;
+            break;
+        case (char)REG_TYPE::RET:
+            return &RET;
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
 unsigned char * Interpreter::getRegistry(char index) {
     switch(index){
         case (char)REG_TYPE::RA:
@@ -74,13 +91,14 @@ unsigned char * Interpreter::getRegistry(char index) {
             return &SP;
         */
         case (char)REG_TYPE::IN:
-            return ((unsigned char *) &IN); // HOTFIX TO TEST SOMETHING. TODO : CHANGE PROPERLY!
+            return ((unsigned char *) &IN); // HOTFIX : INTERPRETS ONLY THE LOWER BYTE
         /* // NEED MOVH / MOVL ( for Highs and Lows )
         case (char)REG_TYPE::RET:
             return &RET;
         */
         default:
             std::cout << "[ERR] Attempting to retrieve a registry that doesn't exist! " << (int)index << std::endl;
+            return 0;
             break;
     }
 }

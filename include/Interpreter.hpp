@@ -17,6 +17,7 @@ class Interpreter
         char * ROM;
         unsigned char * RAM;
 
+        unsigned char * getSpecialRegistry(char index);
         unsigned char * getRegistry( char index );
 
         sf::Color getColor( char color );
