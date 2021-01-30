@@ -4,6 +4,10 @@ This is an emulator written in C++, for emulating games packed by the [assembler
 
 This was written for a hackathon I attended in 2020. You can find the request in this readme, but it's written in romanian.
 
+# Instructions
+The emulator automatically reads, on boot, the "game.rom" file that must be in the root folder of the compiled source code of the emulator. If everything works as expected, you should see your game being rendered on the emulator screen.
+
+The emulator has 8 buttons and a fps counter.
 
 # Hackathon request
 
